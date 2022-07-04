@@ -10,4 +10,5 @@ import br.com.transmaximo.model.Caminhao;
 public interface CaminhaoService {
 
 	void salvar(Caminhao caminhao) throws SQLException;
+	Caminhao buscarPorId(Long id);
 }

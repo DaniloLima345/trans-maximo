@@ -21,4 +21,10 @@ public class CaminhaoServiceImpl implements CaminhaoService {
 		
 	}
 
+	@Override
+	public Caminhao buscarPorId(Long id) {
+		// TODO Auto-generated method stub
+		return caminhaoDao.buscarPorId(id);
+	}
+
 }

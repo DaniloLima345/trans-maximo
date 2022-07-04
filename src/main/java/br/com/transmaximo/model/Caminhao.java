@@ -8,6 +8,14 @@ public class Caminhao {
 	private String anoFabricacao;
 	private Double capacidade;
 
+	public Caminhao(Long id, String placa, String modelo, String anoFabricacao, Double capacidade) {
+		this.id = id;
+		this.placa = placa;
+		this.modelo = modelo;
+		this.anoFabricacao = anoFabricacao;
+		this.capacidade = capacidade;
+	}
+	
 	public Long getId() {
 		return id;
 	}
