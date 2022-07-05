@@ -1,13 +1,15 @@
 package br.com.transmaximo.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
@@ -36,12 +38,21 @@ public class CaminhaoDAO {
 	
 	public Caminhao buscarPorId(Long id) {
 		
-		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", id);
-		String sql = "SELECT * FROM CAMINHAO WHERE ID = :id";
+		String sql = "SELECT * FROM CAMINHAO WHERE ID = ?";
 		
-		return jdbcTemplate.queryForObject(sql, new Object[] {id}, (rs,rowNum)->
-				new Caminhao(rs.getLong("id"), rs.getString("placa"), rs.getString("modelo"), rs.getString("anoFabricacao"), rs.getDouble("capacidade")));
-		
+		return jdbcTemplate.queryForObject(sql, new RowMapper<Caminhao>() {
+			@Override
+			public Caminhao mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Caminhao caminhao = new Caminhao();
+				caminhao.setId(rs.getLong("ID"));
+				caminhao.setPlaca(rs.getString("PLACA"));
+				caminhao.setModelo(rs.getString("MODELO"));
+				caminhao.setAnoFabricacao(rs.getString("ANOFABRICACAO"));
+				caminhao.setCapacidade(rs.getDouble("CAPACIDADE"));
+				
+				return caminhao;
+			}
+		}, new Object[]{id});
 	}
 
 }

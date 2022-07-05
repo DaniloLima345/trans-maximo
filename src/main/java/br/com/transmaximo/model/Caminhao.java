@@ -16,6 +16,10 @@ public class Caminhao {
 		this.capacidade = capacidade;
 	}
 	
+	public Caminhao() {
+		super();
+	}
+
 	public Long getId() {
 		return id;
 	}
