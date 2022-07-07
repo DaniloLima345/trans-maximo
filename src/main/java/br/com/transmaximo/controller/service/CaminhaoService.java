@@ -11,4 +11,5 @@ public interface CaminhaoService {
 
 	void salvar(Caminhao caminhao) throws SQLException;
 	Caminhao buscarPorId(Long id);
+	Caminhao buscarPorPlaca(String placa);
 }

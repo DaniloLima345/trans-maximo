@@ -40,4 +40,11 @@ public class CaminhaoController {
 		
 		return ResponseEntity.ok(caminhao);
 	}
+	
+	@GetMapping("/buscarPorPlaca/{placa}")
+	public ResponseEntity<Caminhao> buscarPorPlaca(@PathVariable String placa){
+		Caminhao caminhao = caminhaoService.buscarPorPlaca(placa);
+		
+		return ResponseEntity.ok(caminhao);
+	}
 }

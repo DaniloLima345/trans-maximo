@@ -54,5 +54,24 @@ public class CaminhaoDAO {
 			}
 		}, new Object[]{id});
 	}
+	
+	public Caminhao buscarPorPlaca(String placa) {
+		
+		String sql = "SELECT * FROM CAMINHAO WHERE PLACA = ?";
+		
+		return jdbcTemplate.queryForObject(sql, new RowMapper<Caminhao>() {
+			@Override
+			public Caminhao mapRow(ResultSet rs, int rowNum) throws SQLException{
+				Caminhao caminhao = new Caminhao();
+				caminhao.setId(rs.getLong("ID"));
+				caminhao.setPlaca(rs.getString("PLACA"));
+				caminhao.setModelo(rs.getString("MODELO"));
+				caminhao.setAnoFabricacao(rs.getString("ANOFABRICACAO"));
+				caminhao.setCapacidade(rs.getDouble("CAPACIDADE"));
+				
+				return caminhao;
+			}
+		}, new Object[]{placa});
+	}
 
 }
