@@ -10,6 +10,12 @@ import br.com.transmaximo.model.Caminhao;
 public interface CaminhaoService {
 
 	void salvar(Caminhao caminhao) throws SQLException;
+
 	Caminhao buscarPorId(Long id);
+
 	Caminhao buscarPorPlaca(String placa);
+
+	void atualizar(Caminhao caminhao, Long id);
+	
+	void deletar(Long id);
 }

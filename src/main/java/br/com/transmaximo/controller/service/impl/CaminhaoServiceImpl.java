@@ -14,21 +14,32 @@ public class CaminhaoServiceImpl implements CaminhaoService {
 
 	@Autowired
 	private CaminhaoDAO caminhaoDao;
-	
+
 	@Override
 	public void salvar(Caminhao caminhao) throws SQLException {
 		caminhaoDao.salvar(caminhao);
-		
+
 	}
 
 	@Override
 	public Caminhao buscarPorId(Long id) {
 		return caminhaoDao.buscarPorId(id);
 	}
-	
+
 	@Override
 	public Caminhao buscarPorPlaca(String placa) {
 		return caminhaoDao.buscarPorPlaca(placa);
+	}
+
+	@Override
+	public void atualizar(Caminhao caminhao, Long id) {
+		caminhaoDao.atualizar(caminhao, id);
+	}
+
+	@Override
+	public void deletar(Long id) {
+		caminhaoDao.deletar(id);
+		
 	}
 
 }
