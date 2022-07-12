@@ -19,5 +19,15 @@ public class MotoristaServiceImpl implements MotoristaService {
 	public void salvar(Motorista motorista) throws SQLException {
 		motoristaDao.salvar(motorista);
 	}
+
+	@Override
+	public Motorista buscarPorId(Long id) {
+		return motoristaDao.buscarPorId(id);
+	}
+
+	@Override
+	public Motorista buscarPorNome(String nome) {
+		return motoristaDao.buscarPorNome(nome);
+	}
 	
 }

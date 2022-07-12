@@ -10,4 +10,8 @@ import br.com.transmaximo.model.Motorista;
 public interface MotoristaService {
 
 	void salvar(Motorista motorista) throws SQLException;
+
+	Motorista buscarPorId(Long id);
+
+	Motorista buscarPorNome(String nome);
 }
