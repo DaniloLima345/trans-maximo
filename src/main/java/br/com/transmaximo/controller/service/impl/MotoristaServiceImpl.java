@@ -29,5 +29,17 @@ public class MotoristaServiceImpl implements MotoristaService {
 	public Motorista buscarPorNome(String nome) {
 		return motoristaDao.buscarPorNome(nome);
 	}
-	
+
+	@Override
+	public void atualizar(Motorista motorista, Long id) {
+		motoristaDao.atualizar(motorista, id);
+
+	}
+
+	@Override
+	public void deletar(Long id) {
+		motoristaDao.deletar(id);
+
+	}
+
 }

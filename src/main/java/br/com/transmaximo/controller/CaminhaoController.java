@@ -25,46 +25,48 @@ public class CaminhaoController {
 
 	@Autowired
 	private CaminhaoService caminhaoService;
-	
+
 	@Transactional
 	@PostMapping
-	public ResponseEntity<Caminhao> cadastrar(@RequestBody Caminhao caminhao, UriComponentsBuilder uriBuilder) throws SQLException{
-		
+	public ResponseEntity<Caminhao> cadastrar(@RequestBody Caminhao caminhao, UriComponentsBuilder uriBuilder)
+			throws SQLException {
+
 		caminhaoService.salvar(caminhao);
-		
+
 		URI uri = uriBuilder.path("caminhoes/{id}").buildAndExpand(caminhao.getId()).toUri();
-		
+
 		return ResponseEntity.created(uri).body(caminhao);
-		
+
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<Caminhao> buscarPorId(@PathVariable Long id){
+	public ResponseEntity<Caminhao> buscarPorId(@PathVariable Long id) {
 		Caminhao caminhao = caminhaoService.buscarPorId(id);
-		
+
 		return ResponseEntity.ok(caminhao);
 	}
-	
+
 	@GetMapping("/buscarPorPlaca/{placa}")
-	public ResponseEntity<Caminhao> buscarPorPlaca(@PathVariable String placa){
+	public ResponseEntity<Caminhao> buscarPorPlaca(@PathVariable String placa) {
 		Caminhao caminhao = caminhaoService.buscarPorPlaca(placa);
-		
+
 		return ResponseEntity.ok(caminhao);
 	}
-	
+
 	@Transactional
 	@PutMapping("/{id}")
-	public ResponseEntity<Caminhao> atualizar(@PathVariable Long id, @RequestBody Caminhao caminhaoAtualziado) throws SQLException{
-		
+	public ResponseEntity<Caminhao> atualizar(@PathVariable Long id, @RequestBody Caminhao caminhaoAtualziado)
+			throws SQLException {
+
 		caminhaoService.atualizar(caminhaoAtualziado, id);
 		Caminhao caminhao = caminhaoService.buscarPorId(id);
-		
+
 		return ResponseEntity.ok(caminhao);
 	}
-	
+
 	@Transactional
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deletar(@PathVariable Long id) throws SQLException{
+	public ResponseEntity<?> deletar(@PathVariable Long id) throws SQLException {
 		caminhaoService.deletar(id);
 		return ResponseEntity.ok().build();
 	}

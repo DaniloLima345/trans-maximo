@@ -73,4 +73,18 @@ public class MotoristaDAO {
 		}, new Object[] { nome });
 	}
 
+	public void atualizar(Motorista motorista, Long id) {
+
+		String sql = "UPDATE MOTORISTA SET DOCUMENTO = ?, NOME = ?, ENDERECO = ?, DATANASCIMENTO = ? WHERE ID = ?";
+
+		jdbcTemplate.update(sql, new Object[] { motorista.getDocumento(), motorista.getNome(), motorista.getEndereco(),
+				motorista.getDataNascimento(), id });
+	}
+	
+	public void deletar(Long id) {
+		String sql = "DELETE FROM MOTORISTA WHERE ID = ?";
+		
+		jdbcTemplate.update(sql, new Object[] {id});
+	}
+
 }

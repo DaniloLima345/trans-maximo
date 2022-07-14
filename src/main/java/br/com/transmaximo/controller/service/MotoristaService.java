@@ -14,4 +14,8 @@ public interface MotoristaService {
 	Motorista buscarPorId(Long id);
 
 	Motorista buscarPorNome(String nome);
+
+	void atualizar(Motorista motorista, Long id);
+	
+	void deletar(Long id);
 }
