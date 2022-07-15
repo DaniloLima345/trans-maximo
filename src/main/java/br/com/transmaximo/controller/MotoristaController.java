@@ -20,13 +20,13 @@ import br.com.transmaximo.controller.service.MotoristaService;
 import br.com.transmaximo.model.Motorista;
 
 @RequestMapping("/motoristas")
-@RestController
+@RestController //Avisando o spring que ele vai receber requisiçoes do tipo rest
 public class MotoristaController {
 
 	@Autowired
 	private MotoristaService motoristaService;
 
-	@Transactional
+	@Transactional //Ele vai utilizar uma transação do banco de dados
 	@PostMapping
 	public ResponseEntity<Motorista> cadastrar(@RequestBody Motorista motorista, UriComponentsBuilder uriBuilder)
 			throws SQLException {
