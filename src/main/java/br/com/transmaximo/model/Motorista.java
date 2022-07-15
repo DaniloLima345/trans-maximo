@@ -1,7 +1,10 @@
 package br.com.transmaximo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Motorista {
 
+	@JsonIgnore
 	private Long id;
 	private Long documento;
 	private String nome;

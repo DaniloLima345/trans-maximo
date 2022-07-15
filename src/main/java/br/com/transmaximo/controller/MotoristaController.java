@@ -53,7 +53,7 @@ public class MotoristaController {
 
 	@Transactional
 	@PutMapping("/{id}")
-	public ResponseEntity<Motorista> ataulizar(@PathVariable Long id, @RequestBody Motorista motoristaAtualizado)
+	public ResponseEntity<Motorista> atualizar(@PathVariable Long id, @RequestBody Motorista motoristaAtualizado)
 			throws SQLException {
 		motoristaService.atualizar(motoristaAtualizado, id);
 		Motorista motorista = motoristaService.buscarPorId(id);

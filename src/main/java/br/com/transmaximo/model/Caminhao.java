@@ -1,7 +1,10 @@
 package br.com.transmaximo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Caminhao {
 
+	@JsonIgnore
 	private Long id;
 	private String placa;
 	private String modelo;
