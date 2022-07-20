@@ -25,4 +25,16 @@ public class DocumentoServiceImpl implements DocumentoService {
 		return documentoDAO.buscarPorId(id);
 	}
 
+	@Override
+	public void atualizar(Documento documento, Long id) throws SQLException {
+		documentoDAO.atualizar(documento, id);
+
+	}
+
+	@Override
+	public void deletar(Long id) throws SQLException {
+		documentoDAO.deletar(id);
+
+	}
+
 }

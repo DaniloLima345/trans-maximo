@@ -18,9 +18,9 @@ import br.com.transmaximo.model.Documento;
 @Component // Spring usa para gerenciar o objeto
 public class DocumentoDAO {
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
 	@Autowired // Para o spring injetar automaticamente
+	private JdbcTemplate jdbcTemplate;
+	@Autowired 
 	private DataSource dataSource;
 
 	public int salvar(Documento documento) {
@@ -51,21 +51,15 @@ public class DocumentoDAO {
 		}, new Object[] { id });
 	}
 
-//	public Documento buscarPorNomeMotorista(Long id) {
-//		String sql = "SELECT D.ID, M.ID AS ID_MOTORISTA, M.NOME, M.DATANASCIMENTO FROM DOCUMENTOS D INNER JOIN MOTORISTA M WHERE D.ID_MOTORISTA = M.ID AND M.ID = ?";
-//
-//		return jdbcTemplate.queryForObject(sql, new RowMapper<Documento>() {
-//			public Documento mapRow(ResultSet rs, int numRow) throws SQLException {
-//				Documento documento = new Documento();
-//				Motorista motorista = new Motorista();
-//				documento.setId(rs.getLong("ID"));
-//				motorista.setId(rs.getLong("ID"));
-//				motorista.setNome(rs.getString("NOME"));
-//				motorista.setDataNascimento(rs.getString("DATANASCIMENTO"));
-//
-//				return documento;
-//			}
-//		}, new Object[] { id });
-//	}
+	public void atualizar(Documento documento, Long id) throws SQLException {
+		String sql = "UPDATE DOCUMENTOS SET TIPODOCUMENTO = ?, DATAVENCIMENTO = ? WHERE ID = ?";
 
+		jdbcTemplate.update(sql, new Object[] { documento.getTipoDocumento(), documento.getDataVencimento(), id });
+	}
+
+	public void deletar(Long id) throws SQLException {
+		String sql = "DELETE FROM DOCUMENTOS WHERE ID = ?";
+
+		jdbcTemplate.update(sql, new Object[] { id });
+	}
 }

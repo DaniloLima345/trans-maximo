@@ -6,9 +6,11 @@ import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,5 +42,23 @@ public class DocumentoController {
 		Documento documento = documentoService.buscarPorId(id);
 
 		return ResponseEntity.ok(documento);
+	}
+
+	@Transactional
+	@PutMapping("/{id}")
+	public ResponseEntity<Documento> atualizar(@PathVariable Long id, @RequestBody Documento documentoAtualizado)
+			throws SQLException {
+		documentoService.atualizar(documentoAtualizado, id);
+		Documento documento = documentoService.buscarPorId(id);
+
+		return ResponseEntity.ok(documento);
+	}
+	
+	@Transactional
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Documento> deletar(@PathVariable Long id) throws SQLException {
+		documentoService.deletar(id);
+		
+		return ResponseEntity.ok().build();
 	}
 }
