@@ -13,20 +13,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.transmaximo.controller.service.MotoristaService;
 import br.com.transmaximo.model.Motorista;
+import br.com.transmaximo.paginacao.ConfigPagina;
+import br.com.transmaximo.paginacao.Pagina;
 
 @RequestMapping("/motoristas")
-@RestController //Avisando o spring que ele vai receber requisiçoes do tipo rest
+@RestController // Avisando o spring que ele vai receber requisiçoes do tipo rest
 public class MotoristaController {
 
 	@Autowired
 	private MotoristaService motoristaService;
 
-	@Transactional //Ele vai utilizar uma transação do banco de dados
+	@Transactional // Ele vai utilizar uma transação do banco de dados
 	@PostMapping
 	public ResponseEntity<Motorista> cadastrar(@RequestBody Motorista motorista, UriComponentsBuilder uriBuilder)
 			throws SQLException {
@@ -39,7 +42,7 @@ public class MotoristaController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Motorista> buscarPorId(@PathVariable Long id) throws SQLException {
-		Motorista motorista = motoristaService.buscarPorId(id);
+		Motorista motorista = motoristaService.buscarPorId(id).get();
 
 		return ResponseEntity.ok(motorista);
 	}
@@ -56,16 +59,22 @@ public class MotoristaController {
 	public ResponseEntity<Motorista> atualizar(@PathVariable Long id, @RequestBody Motorista motoristaAtualizado)
 			throws SQLException {
 		motoristaService.atualizar(motoristaAtualizado, id);
-		Motorista motorista = motoristaService.buscarPorId(id);
+		Motorista motorista = motoristaService.buscarPorId(id).get();
 
 		return ResponseEntity.ok(motorista);
 	}
 
 	@Transactional
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Motorista> deletar(@PathVariable Long id)
-			throws SQLException {
+	public ResponseEntity<Motorista> deletar(@PathVariable Long id) throws SQLException {
 		motoristaService.deletar(id);
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/buscarTodos")
+	public ResponseEntity<Pagina<Motorista>> buscarTodos(@RequestParam int tamanho, @RequestParam int numeroDaPagina) {
+		ConfigPagina configPagina = new ConfigPagina(tamanho, numeroDaPagina);
+		Pagina<Motorista> motoristas = motoristaService.buscarTodos(configPagina);
+		return ResponseEntity.ok(motoristas);
 	}
 }

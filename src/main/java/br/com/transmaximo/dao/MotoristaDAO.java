@@ -3,29 +3,24 @@ package br.com.transmaximo.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
 import br.com.transmaximo.model.Motorista;
+import br.com.transmaximo.paginacao.ConfigPagina;
 
 @Component
-public class MotoristaDAO {
+public class MotoristaDAO extends DataAccessObject<Motorista> {
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-	@Autowired
-	private DataSource dataSource;
+	@Override
+	public Motorista salvar(Motorista motorista) {
 
-	public int salvar(Motorista motorista) {
-
-		SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource).withTableName("MOTORISTA");
+		SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource).usingGeneratedKeyColumns("ID").withTableName("MOTORISTA");
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("DOCUMENTO", motorista.getDocumento());
@@ -33,15 +28,16 @@ public class MotoristaDAO {
 		parameters.put("ENDERECO", motorista.getEndereco());
 		parameters.put("DATANASCIMENTO", motorista.getDataNascimento());
 
-		return insert.execute(parameters);
+		return buscarPorId(insert.executeAndReturnKey(parameters).longValue()).get();
 	}
 
-	public Motorista buscarPorId(Long id) {
+	@Override
+	public Optional<Motorista> buscarPorId(Long id) {
 		String sql = "SELECT * FROM MOTORISTA WHERE ID = ?";
 
-		return jdbcTemplate.queryForObject(sql, new RowMapper<Motorista>() {
+		return jdbcTemplate.queryForObject(sql, new RowMapper<Optional<Motorista>>() {
 			@Override
-			public Motorista mapRow(ResultSet rs, int rowNum) throws SQLException {
+			public Optional<Motorista> mapRow(ResultSet rs, int rowNum) throws SQLException {
 				Motorista motorista = new Motorista();
 				motorista.setId(rs.getLong("ID"));
 				motorista.setDocumento(rs.getLong("DOCUMENTO"));
@@ -49,7 +45,7 @@ public class MotoristaDAO {
 				motorista.setEndereco(rs.getString("ENDERECO"));
 				motorista.setDataNascimento(rs.getString("DATANASCIMENTO"));
 
-				return motorista;
+				return Optional.of(motorista);
 			}
 		}, new Object[] { id });
 	}
@@ -80,11 +76,32 @@ public class MotoristaDAO {
 		jdbcTemplate.update(sql, new Object[] { motorista.getDocumento(), motorista.getNome(), motorista.getEndereco(),
 				motorista.getDataNascimento(), id });
 	}
-	
+
 	public void deletar(Long id) {
 		String sql = "DELETE FROM MOTORISTA WHERE ID = ?";
+
+		jdbcTemplate.update(sql, new Object[] { id });
+	}
+	
+	public List<Motorista> listarTodos(ConfigPagina configPagina) {
+		String sql = "SELECT * FROM MOTORISTA LIMIT ?, ?";
 		
-		jdbcTemplate.update(sql, new Object[] {id});
+		return jdbcTemplate.query(sql, new RowMapper<Motorista>() {
+
+			@Override
+			public Motorista mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Motorista motorista = new Motorista();
+
+				motorista.setId(rs.getLong("ID"));
+				motorista.setDocumento(rs.getLong("DOCUMENTO"));
+				motorista.setNome(rs.getString("NOME"));
+				motorista.setEndereco(rs.getString("ENDERECO"));
+				motorista.setDataNascimento(rs.getString("DATANASCIMENTO"));
+
+				return motorista;
+			}
+			
+		}, new Object[] {configPagina.getPrimeiroElemento(), configPagina.getTamanho()});
 	}
 
 }
