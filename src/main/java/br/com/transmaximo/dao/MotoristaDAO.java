@@ -20,7 +20,8 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 	@Override
 	public Motorista salvar(Motorista motorista) {
 
-		SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource).usingGeneratedKeyColumns("ID").withTableName("MOTORISTA");
+		SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource).usingGeneratedKeyColumns("ID")
+				.withTableName("MOTORISTA");
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("DOCUMENTO", motorista.getDocumento());
@@ -39,6 +40,7 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 			@Override
 			public Optional<Motorista> mapRow(ResultSet rs, int rowNum) throws SQLException {
 				Motorista motorista = new Motorista();
+
 				motorista.setId(rs.getLong("ID"));
 				motorista.setDocumento(rs.getLong("DOCUMENTO"));
 				motorista.setNome(rs.getString("NOME"));
@@ -54,7 +56,7 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 		String sql = "SELECT * FROM MOTORISTA WHERE NOME = ?";
 
 		return jdbcTemplate.queryForObject(sql, new RowMapper<Motorista>() {
-
+			
 			public Motorista mapRow(ResultSet rs, int rowNum) throws SQLException {
 				Motorista motorista = new Motorista();
 
@@ -69,6 +71,7 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 		}, new Object[] { nome });
 	}
 
+	@Override
 	public void atualizar(Motorista motorista, Long id) {
 
 		String sql = "UPDATE MOTORISTA SET DOCUMENTO = ?, NOME = ?, ENDERECO = ?, DATANASCIMENTO = ? WHERE ID = ?";
@@ -77,15 +80,17 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 				motorista.getDataNascimento(), id });
 	}
 
+	@Override
 	public void deletar(Long id) {
 		String sql = "DELETE FROM MOTORISTA WHERE ID = ?";
 
 		jdbcTemplate.update(sql, new Object[] { id });
 	}
-	
+
+	@Override
 	public List<Motorista> listarTodos(ConfigPagina configPagina) {
 		String sql = "SELECT * FROM MOTORISTA LIMIT ?, ?";
-		
+
 		return jdbcTemplate.query(sql, new RowMapper<Motorista>() {
 
 			@Override
@@ -100,8 +105,8 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 
 				return motorista;
 			}
-			
-		}, new Object[] {configPagina.getPrimeiroElemento(), configPagina.getTamanho()});
+
+		}, new Object[] { configPagina.getPrimeiroElemento(), configPagina.getTamanho() });
 	}
 
 }

@@ -3,29 +3,25 @@ package br.com.transmaximo.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
 import br.com.transmaximo.model.Caminhao;
+import br.com.transmaximo.paginacao.ConfigPagina;
 
 @Component
-public class CaminhaoDAO {
+public class CaminhaoDAO extends DataAccessObject<Caminhao> {
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-	@Autowired
-	private DataSource dataSource;
+	@Override
+	public Caminhao salvar(Caminhao caminhao) {
 
-	public int salvar(Caminhao caminhao) {
-
-		SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource).withTableName("CAMINHAO");
+		SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource).usingGeneratedKeyColumns("ID")
+				.withTableName("CAMINHAO");
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("PLACA", caminhao.getPlaca());
@@ -33,16 +29,17 @@ public class CaminhaoDAO {
 		parameters.put("ANOFABRICACAO", caminhao.getAnoFabricacao());
 		parameters.put("CAPACIDADE", caminhao.getCapacidade());
 
-		return insert.execute(parameters);
+		return buscarPorId(insert.executeAndReturnKey(parameters).longValue()).get();
 	}
 
-	public Caminhao buscarPorId(Long id) {
+	@Override
+	public Optional<Caminhao> buscarPorId(Long id) {
 
 		String sql = "SELECT * FROM CAMINHAO WHERE ID = ?";
 
-		return jdbcTemplate.queryForObject(sql, new RowMapper<Caminhao>() {
+		return jdbcTemplate.queryForObject(sql, new RowMapper<Optional<Caminhao>>() {
 			@Override
-			public Caminhao mapRow(ResultSet rs, int rowNum) throws SQLException {
+			public Optional<Caminhao> mapRow(ResultSet rs, int rowNum) throws SQLException {
 				Caminhao caminhao = new Caminhao();
 				caminhao.setId(rs.getLong("ID"));
 				caminhao.setPlaca(rs.getString("PLACA"));
@@ -50,7 +47,7 @@ public class CaminhaoDAO {
 				caminhao.setAnoFabricacao(rs.getString("ANOFABRICACAO"));
 				caminhao.setCapacidade(rs.getDouble("CAPACIDADE"));
 
-				return caminhao;
+				return Optional.of(caminhao);
 			}
 		}, new Object[] { id });
 	}
@@ -74,17 +71,40 @@ public class CaminhaoDAO {
 		}, new Object[] { placa });
 	}
 
+	@Override
 	public void atualizar(Caminhao caminhao, Long id) {
 		String sql = "UPDATE CAMINHAO SET PLACA = ?, MODELO = ?, ANOFABRICACAO = ?, CAPACIDADE = ? WHERE ID = ?";
 
 		jdbcTemplate.update(sql, new Object[] { caminhao.getPlaca(), caminhao.getModelo(), caminhao.getAnoFabricacao(),
 				caminhao.getCapacidade(), id });
 	}
-	
+
+	@Override
 	public void deletar(Long id) {
 		String sql = "DELETE FROM CAMINHAO WHERE ID = ?";
-		
-		jdbcTemplate.update(sql, new Object[] {id});
+
+		jdbcTemplate.update(sql, new Object[] { id });
+	}
+
+	@Override
+	public List<Caminhao> listarTodos(ConfigPagina configPagina) {
+		String sql = "SELECT * FROM CAMINHAO LIMIT ?, ?";
+
+		return jdbcTemplate.query(sql, new RowMapper<Caminhao>() {
+
+			@Override
+			public Caminhao mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Caminhao caminhao = new Caminhao();
+
+				caminhao.setPlaca(rs.getString("PLACA"));
+				caminhao.setModelo(rs.getString("MODELO"));
+				caminhao.setAnoFabricacao(rs.getString("ANOFABRICACAO"));
+				caminhao.setCapacidade(rs.getDouble("CAPACIDADE"));
+
+				return caminhao;
+			}
+
+		}, new Object[] { configPagina.getPrimeiroElemento(), configPagina.getTamanho() });
 	}
 
 }

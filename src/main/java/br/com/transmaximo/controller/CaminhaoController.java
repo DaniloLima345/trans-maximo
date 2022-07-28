@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.transmaximo.controller.service.CaminhaoService;
 import br.com.transmaximo.model.Caminhao;
+import br.com.transmaximo.paginacao.ConfigPagina;
+import br.com.transmaximo.paginacao.Pagina;
 
 @RequestMapping("/caminhoes")
 @RestController
@@ -41,7 +44,7 @@ public class CaminhaoController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Caminhao> buscarPorId(@PathVariable Long id) {
-		Caminhao caminhao = caminhaoService.buscarPorId(id);
+		Caminhao caminhao = caminhaoService.buscarPorId(id).get();
 
 		return ResponseEntity.ok(caminhao);
 	}
@@ -59,7 +62,7 @@ public class CaminhaoController {
 			throws SQLException {
 
 		caminhaoService.atualizar(caminhaoAtualziado, id);
-		Caminhao caminhao = caminhaoService.buscarPorId(id);
+		Caminhao caminhao = caminhaoService.buscarPorId(id).get();
 
 		return ResponseEntity.ok(caminhao);
 	}
@@ -69,5 +72,12 @@ public class CaminhaoController {
 	public ResponseEntity<?> deletar(@PathVariable Long id) throws SQLException {
 		caminhaoService.deletar(id);
 		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/buscarTodos")
+	public ResponseEntity<Pagina<Caminhao>> buscarTodos(@RequestParam int tamanho, @RequestParam int numeroDaPagina) {
+		ConfigPagina configPagina = new ConfigPagina(tamanho, numeroDaPagina);
+		Pagina<Caminhao> caminhoes = caminhaoService.buscarTodos(configPagina);
+		return ResponseEntity.ok(caminhoes);
 	}
 }

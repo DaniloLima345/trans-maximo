@@ -1,6 +1,7 @@
 package br.com.transmaximo.controller.service.impl;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Component;
 import br.com.transmaximo.controller.service.CaminhaoService;
 import br.com.transmaximo.dao.CaminhaoDAO;
 import br.com.transmaximo.model.Caminhao;
+import br.com.transmaximo.paginacao.ConfigPagina;
+import br.com.transmaximo.paginacao.Pagina;
 
 @Component
 public class CaminhaoServiceImpl implements CaminhaoService {
@@ -16,13 +19,13 @@ public class CaminhaoServiceImpl implements CaminhaoService {
 	private CaminhaoDAO caminhaoDao;
 
 	@Override
-	public void salvar(Caminhao caminhao) throws SQLException {
-		caminhaoDao.salvar(caminhao);
+	public Caminhao salvar(Caminhao caminhao) throws SQLException {
+		return caminhaoDao.salvar(caminhao);
 
 	}
 
 	@Override
-	public Caminhao buscarPorId(Long id) {
+	public Optional<Caminhao> buscarPorId(Long id) {
 		return caminhaoDao.buscarPorId(id);
 	}
 
@@ -40,6 +43,14 @@ public class CaminhaoServiceImpl implements CaminhaoService {
 	public void deletar(Long id) {
 		caminhaoDao.deletar(id);
 		
+	}
+
+	@Override
+	public Pagina<Caminhao> buscarTodos(ConfigPagina configPagina) {
+		Pagina<Caminhao> pagina = new Pagina<Caminhao>();
+		pagina.setConfig(configPagina);
+		pagina.setPayload(caminhaoDao.listarTodos(configPagina));
+		return pagina;
 	}
 
 }
