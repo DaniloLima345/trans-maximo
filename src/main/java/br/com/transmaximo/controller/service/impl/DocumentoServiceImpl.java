@@ -1,6 +1,7 @@
 package br.com.transmaximo.controller.service.impl;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Component;
 import br.com.transmaximo.controller.service.DocumentoService;
 import br.com.transmaximo.dao.DocumentoDAO;
 import br.com.transmaximo.model.Documento;
+import br.com.transmaximo.paginacao.ConfigPagina;
+import br.com.transmaximo.paginacao.Pagina;
 
 @Component
 public class DocumentoServiceImpl implements DocumentoService {
@@ -16,12 +19,12 @@ public class DocumentoServiceImpl implements DocumentoService {
 	private DocumentoDAO documentoDAO;
 
 	@Override
-	public int salvar(Documento documento) throws SQLException {
+	public Documento salvar(Documento documento) throws SQLException {
 		return documentoDAO.salvar(documento);
 	}
 
 	@Override
-	public Documento buscarPorId(Long id) {
+	public Optional<Documento> buscarPorId(Long id) {
 		return documentoDAO.buscarPorId(id);
 	}
 
@@ -35,6 +38,14 @@ public class DocumentoServiceImpl implements DocumentoService {
 	public void deletar(Long id) throws SQLException {
 		documentoDAO.deletar(id);
 
+	}
+
+	@Override
+	public Pagina<Documento> buscarTodos(ConfigPagina configPagina) {
+		Pagina<Documento> pagina = new Pagina<Documento>();
+		pagina.setConfig(configPagina);
+		pagina.setPayload(documentoDAO.listarTodos(configPagina));
+		return pagina;
 	}
 
 }

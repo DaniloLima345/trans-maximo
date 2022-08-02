@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.transmaximo.controller.service.DocumentoService;
 import br.com.transmaximo.model.Documento;
+import br.com.transmaximo.paginacao.ConfigPagina;
+import br.com.transmaximo.paginacao.Pagina;
 
 @RequestMapping("/documentos")
 @RestController
@@ -39,7 +42,7 @@ public class DocumentoController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Documento> buscarPorId(@PathVariable Long id) throws SQLException {
-		Documento documento = documentoService.buscarPorId(id);
+		Documento documento = documentoService.buscarPorId(id).get();
 
 		return ResponseEntity.ok(documento);
 	}
@@ -48,8 +51,9 @@ public class DocumentoController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Documento> atualizar(@PathVariable Long id, @RequestBody Documento documentoAtualizado)
 			throws SQLException {
+		
 		documentoService.atualizar(documentoAtualizado, id);
-		Documento documento = documentoService.buscarPorId(id);
+		Documento documento = documentoService.buscarPorId(id).get();
 
 		return ResponseEntity.ok(documento);
 	}
@@ -58,7 +62,13 @@ public class DocumentoController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Documento> deletar(@PathVariable Long id) throws SQLException {
 		documentoService.deletar(id);
-		
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/buscarTodos")
+	public ResponseEntity<Pagina<Documento>> listarTodos(@RequestParam int tamanho, @RequestParam int numeroDaPagina){
+		ConfigPagina configPagina = new ConfigPagina(tamanho, numeroDaPagina);
+		Pagina<Documento> documento = documentoService.buscarTodos(configPagina);
+		return ResponseEntity.ok(documento);
 	}
 }
