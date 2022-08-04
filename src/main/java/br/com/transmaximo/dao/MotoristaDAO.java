@@ -56,7 +56,7 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 		String sql = "SELECT * FROM MOTORISTA WHERE NOME = ?";
 
 		return jdbcTemplate.queryForObject(sql, new RowMapper<Motorista>() {
-			
+
 			public Motorista mapRow(ResultSet rs, int rowNum) throws SQLException {
 				Motorista motorista = new Motorista();
 
@@ -74,10 +74,25 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 	@Override
 	public void atualizar(Motorista motorista, Long id) {
 
-		String sql = "UPDATE MOTORISTA SET DOCUMENTO = ?, NOME = ?, ENDERECO = ?, DATANASCIMENTO = ? WHERE ID = ?";
+		StringBuilder sqlBuilder = new StringBuilder();
 
-		jdbcTemplate.update(sql, new Object[] { motorista.getDocumento(), motorista.getNome(), motorista.getEndereco(),
-				motorista.getDataNascimento(), id });
+		sqlBuilder.append("UPDATE MOTORISTA SET ");
+
+		if (motorista.getDocumento() != null)
+			sqlBuilder.append("DOCUMENTO = " + motorista.getDocumento());
+		if (motorista.getNome() != null)
+			sqlBuilder.append("NOME = '" + motorista.getNome() + "'");
+		if (motorista.getEndereco() != null)
+			sqlBuilder.append("ENDERECO = '" + motorista.getEndereco() + "'");
+		if (motorista.getDataNascimento() != null)
+			sqlBuilder.append("DATANASCIMENTO = '" + motorista.getDataNascimento() + "'");
+
+		sqlBuilder.append(" WHERE ID = '" + id + "'");
+
+		String sql = sqlBuilder.toString();
+
+		jdbcTemplate.update(sql);
+
 	}
 
 	@Override
