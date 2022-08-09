@@ -50,9 +50,20 @@ public class DocumentoDAO extends DataAccessObject<Documento> {
 
 	@Override
 	public void atualizar(Documento documento, Long id) {
-		String sql = "UPDATE DOCUMENTOS SET TIPODOCUMENTO = ?, DATAVENCIMENTO = ? WHERE ID = ?";
+		StringBuilder sqlBuilder = new StringBuilder();
 
-		jdbcTemplate.update(sql, new Object[] { documento.getTipoDocumento(), documento.getDataVencimento(), id });
+		sqlBuilder.append("UPDATE DOCUMENTO SET ");
+
+		if (documento.getTipoDocumento() != null)
+			sqlBuilder.append("TIPODOCUMENTO = '" + documento.getTipoDocumento() + "'");
+		if (documento.getDataVencimento() != null)
+			sqlBuilder.append("DATAVENCIMENTO = '" + documento.getDataVencimento() + "'");
+		if (documento.getIdMotorista() != null)
+			sqlBuilder.append("ID_MOTORISTA = " + documento.getIdMotorista());
+
+		String sql = sqlBuilder.toString();
+
+		jdbcTemplate.update(sql);
 	}
 
 	@Override

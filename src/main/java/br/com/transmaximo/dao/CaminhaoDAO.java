@@ -73,10 +73,25 @@ public class CaminhaoDAO extends DataAccessObject<Caminhao> {
 
 	@Override
 	public void atualizar(Caminhao caminhao, Long id) {
-		String sql = "UPDATE CAMINHAO SET PLACA = ?, MODELO = ?, ANOFABRICACAO = ?, CAPACIDADE = ? WHERE ID = ?";
 
-		jdbcTemplate.update(sql, new Object[] { caminhao.getPlaca(), caminhao.getModelo(), caminhao.getAnoFabricacao(),
-				caminhao.getCapacidade(), id });
+		StringBuilder sqlBuilder = new StringBuilder();
+		
+		sqlBuilder.append("UPDATE CAMINHAO SET ");
+		
+		if(caminhao.getPlaca() != null)
+			sqlBuilder.append("PLACA = '" + caminhao.getPlaca() + "'");
+		if(caminhao.getModelo() != null)
+			sqlBuilder.append("MODELO = '" + caminhao.getModelo() + "'");
+		if(caminhao.getAnoFabricacao() != null)
+			sqlBuilder.append("ANOFABRICACAO = '" + caminhao.getAnoFabricacao() + "'");
+		if(caminhao.getCapacidade() != null)
+			sqlBuilder.append("CAPACIDADE = " + caminhao.getCapacidade());
+		
+		sqlBuilder.append(" WHERE ID = " + id);
+		
+		String sql = sqlBuilder.toString();
+		
+		jdbcTemplate.update(sql);
 	}
 
 	@Override

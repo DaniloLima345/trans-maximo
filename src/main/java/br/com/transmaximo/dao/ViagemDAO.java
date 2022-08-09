@@ -52,21 +52,55 @@ public class ViagemDAO extends DataAccessObject<Viagem> {
 	}
 
 	@Override
-	public void atualizar(Viagem Object, Long id) {
-		// TODO Auto-generated method stub
+	public void atualizar(Viagem viagem, Long id) {
 
+		StringBuilder sqlBuilder = new StringBuilder();
+
+		sqlBuilder.append("UPDATE VIAGEM SET ");
+
+		if (viagem.getDestino() != null)
+			sqlBuilder.append("DESTINO = '" + viagem.getDestino() + "'");
+		if (viagem.getTipoCarga() != null)
+			sqlBuilder.append("TIPO_CARGA = '" + viagem.getTipoCarga() + "'");
+		if (viagem.getIdMotorista() != null)
+			sqlBuilder.append("ID_MOTORISTA = " + viagem.getIdMotorista());
+		if (viagem.getIdCaminhao() != null)
+			sqlBuilder.append("ID_CAMINHAO = " + viagem.getIdCaminhao());
+
+		sqlBuilder.append(" WHERE ID = " + id);
+
+		String sql = sqlBuilder.toString();
+
+		jdbcTemplate.update(sql);
 	}
 
 	@Override
 	public void deletar(Long id) {
-		// TODO Auto-generated method stub
 
+		String sql = "DELETE FROM VIAGEM WHERE ID = ?";
+
+		jdbcTemplate.update(sql, new Object[] { id });
 	}
 
 	@Override
 	public List<Viagem> listarTodos(ConfigPagina configPagina) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
+		String sql = "SELECT * FROM VIAGEM LIMIT ?, ?";
+
+		return jdbcTemplate.query(sql, new RowMapper<Viagem>() {
+			@Override
+			public Viagem mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Viagem viagem = new Viagem();
+
+				viagem.setId(rs.getLong("ID"));
+				viagem.setDestino(rs.getString("DESTINO"));
+				viagem.setTipoCarga(rs.getString("TIPO_CARGA"));
+				viagem.setIdMotorista(rs.getLong("ID_MOTORISTA"));
+				viagem.setIdCaminhao(rs.getLong("ID_CAMINHAO"));
+
+				return viagem;
+
+			}
+		}, new Object[] { configPagina.getPrimeiroElemento(), configPagina.getTamanho() });
+	}
 }
