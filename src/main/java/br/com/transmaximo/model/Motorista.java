@@ -9,14 +9,12 @@ public class Motorista {
 	private String nome;
 	private String endereco;
 	private String dataNascimento;
-	private Long idDocumento;
 
-	public Motorista(Long id, String nome, String endereco, String dataNascimento, Long idDocumento) {
+	public Motorista(Long id, String nome, String endereco, String dataNascimento) {
 		this.id = id;
 		this.nome = nome;
 		this.endereco = endereco;
 		this.dataNascimento = dataNascimento;
-		this.idDocumento = idDocumento;
 	}
 
 	public Motorista() {
@@ -53,13 +51,5 @@ public class Motorista {
 
 	public void setDataNascimento(String dataNascimento) {
 		this.dataNascimento = dataNascimento;
-	}
-
-	public Long getIdDocumento() {
-		return idDocumento;
-	}
-
-	public void setIdDocumento(Long idDocumento) {
-		this.idDocumento = idDocumento;
 	}
 }
