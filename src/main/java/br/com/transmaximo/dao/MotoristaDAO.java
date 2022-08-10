@@ -24,10 +24,10 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 				.withTableName("MOTORISTA");
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("DOCUMENTO", motorista.getDocumento());
 		parameters.put("NOME", motorista.getNome());
 		parameters.put("ENDERECO", motorista.getEndereco());
 		parameters.put("DATANASCIMENTO", motorista.getDataNascimento());
+		parameters.put("ID_DOCUMENTO", motorista.getIdDocumento());
 
 		return buscarPorId(insert.executeAndReturnKey(parameters).longValue()).get();
 	}
@@ -42,10 +42,10 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 				Motorista motorista = new Motorista();
 
 				motorista.setId(rs.getLong("ID"));
-				motorista.setDocumento(rs.getLong("DOCUMENTO"));
 				motorista.setNome(rs.getString("NOME"));
 				motorista.setEndereco(rs.getString("ENDERECO"));
 				motorista.setDataNascimento(rs.getString("DATANASCIMENTO"));
+				motorista.setIdDocumento(rs.getLong("ID_DOCUMENTO"));
 
 				return Optional.of(motorista);
 			}
@@ -61,10 +61,10 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 				Motorista motorista = new Motorista();
 
 				motorista.setId(rs.getLong("ID"));
-				motorista.setDocumento(rs.getLong("DOCUMENTO"));
 				motorista.setNome(rs.getString("NOME"));
 				motorista.setEndereco(rs.getString("ENDERECO"));
 				motorista.setDataNascimento(rs.getString("DATANASCIMENTO"));
+				motorista.setIdDocumento(rs.getLong("ID_DOCUMENTO"));
 
 				return motorista;
 			}
@@ -78,14 +78,14 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 
 		sqlBuilder.append("UPDATE MOTORISTA SET ");
 
-		if (motorista.getDocumento() != null)
-			sqlBuilder.append("DOCUMENTO = " + motorista.getDocumento());
 		if (motorista.getNome() != null)
 			sqlBuilder.append("NOME = '" + motorista.getNome() + "'");
 		if (motorista.getEndereco() != null)
 			sqlBuilder.append("ENDERECO = '" + motorista.getEndereco() + "'");
 		if (motorista.getDataNascimento() != null)
 			sqlBuilder.append("DATANASCIMENTO = '" + motorista.getDataNascimento() + "'");
+		if (motorista.getIdDocumento() != null)
+			sqlBuilder.append("ID_DOCUMENTO = " + motorista.getIdDocumento());
 
 		sqlBuilder.append(" WHERE ID = '" + id + "'");
 
@@ -113,10 +113,10 @@ public class MotoristaDAO extends DataAccessObject<Motorista> {
 				Motorista motorista = new Motorista();
 
 				motorista.setId(rs.getLong("ID"));
-				motorista.setDocumento(rs.getLong("DOCUMENTO"));
 				motorista.setNome(rs.getString("NOME"));
 				motorista.setEndereco(rs.getString("ENDERECO"));
 				motorista.setDataNascimento(rs.getString("DATANASCIMENTO"));
+				motorista.setIdDocumento(rs.getLong("ID_DOCUMENTO"));
 
 				return motorista;
 			}

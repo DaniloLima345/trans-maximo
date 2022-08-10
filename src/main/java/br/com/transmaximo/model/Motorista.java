@@ -6,17 +6,17 @@ public class Motorista {
 
 	@JsonIgnore
 	private Long id;
-	private Long documento;
 	private String nome;
 	private String endereco;
 	private String dataNascimento;
+	private Long idDocumento;
 
-	public Motorista(Long id, Long documento, String nome, String endereco, String dataNascimento) {
+	public Motorista(Long id, String nome, String endereco, String dataNascimento, Long idDocumento) {
 		this.id = id;
-		this.documento = documento;
 		this.nome = nome;
 		this.endereco = endereco;
 		this.dataNascimento = dataNascimento;
+		this.idDocumento = idDocumento;
 	}
 
 	public Motorista() {
@@ -29,14 +29,6 @@ public class Motorista {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getDocumento() {
-		return documento;
-	}
-
-	public void setDocumento(Long documento) {
-		this.documento = documento;
 	}
 
 	public String getNome() {
@@ -61,5 +53,13 @@ public class Motorista {
 
 	public void setDataNascimento(String dataNascimento) {
 		this.dataNascimento = dataNascimento;
+	}
+
+	public Long getIdDocumento() {
+		return idDocumento;
+	}
+
+	public void setIdDocumento(Long idDocumento) {
+		this.idDocumento = idDocumento;
 	}
 }
