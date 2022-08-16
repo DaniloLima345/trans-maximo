@@ -1,24 +1,21 @@
 package br.com.transmaximo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class Documento {
-
-	@JsonIgnore
+	
 	private Long id;
 	private String tipoDocumento;
 	private String dataVencimento;
-	private Long idMotorista;
+	private Motorista motorista;
 
 	public Documento() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Documento(Long id, String tipoDocumento, String dataVencimento, Long idMotorista) {
+	public Documento(Long id, String tipoDocumento, String dataVencimento, Motorista motorista) {
 		this.id = id;
 		this.tipoDocumento = tipoDocumento;
 		this.dataVencimento = dataVencimento;
-		this.idMotorista = idMotorista;
+		this.motorista = motorista;
 	}
 
 	public Long getId() {
@@ -45,12 +42,12 @@ public class Documento {
 		this.dataVencimento = dataVencimento;
 	}
 
-	public Long getIdMotorista() {
-		return idMotorista;
+	public Motorista getMotorista() {
+		return motorista;
 	}
 
-	public void setIdMotorista(Long idMotorista) {
-		this.idMotorista = idMotorista;
+	public void setMotorista(Motorista motorista) {
+		this.motorista = motorista;
 	}
 
 }

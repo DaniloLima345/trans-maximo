@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
 import br.com.transmaximo.model.Documento;
+import br.com.transmaximo.model.Motorista;
 import br.com.transmaximo.paginacao.ConfigPagina;
 
 @Component // Spring usa para gerenciar o objeto
@@ -23,26 +24,35 @@ public class DocumentoDAO extends DataAccessObject<Documento> {
 		SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource).usingGeneratedKeyColumns("ID")
 				.withTableName("DOCUMENTOS");
 
+		System.out.println(documento.getMotorista().getId());
+		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("TIPODOCUMENTO", documento.getTipoDocumento());
 		parameters.put("DATAVENCIMENTO", documento.getDataVencimento());
-		parameters.put("ID_MOTORISTA", documento.getIdMotorista());
+		parameters.put("ID_MOTORISTA", documento.getMotorista().getId());
 
 		return buscarPorId(insert.executeAndReturnKey(parameters).longValue()).get();
 	}
 
 	@Override
 	public Optional<Documento> buscarPorId(Long id) {
-		String sql = "SELECT * FROM DOCUMENTOS WHERE ID = ?";
+		String sql = "SELECT * FROM DOCUMENTOS D INNER JOIN MOTORISTA M WHERE D.ID = ? AND D.ID_MOTORISTA = M.ID";
 
 		return jdbcTemplate.queryForObject(sql, new RowMapper<Optional<Documento>>() {
 			public Optional<Documento> mapRow(ResultSet rs, int numRow) throws SQLException {
 				Documento documento = new Documento();
+				Motorista motorista = new Motorista();
+				
+				motorista.setId(rs.getLong("ID_MOTORISTA"));
+				motorista.setNome(rs.getString("NOME"));
+				System.out.println(rs.getString("NOME"));
+				motorista.setEndereco(rs.getString("ENDERECO"));
+				motorista.setDataNascimento(rs.getString("DATANASCIMENTO"));
 				documento.setId(rs.getLong("ID"));
 				documento.setTipoDocumento(rs.getString("TIPODOCUMENTO"));
 				documento.setDataVencimento(rs.getString("DATAVENCIMENTO"));
-				documento.setIdMotorista(rs.getLong("ID_MOTORISTA"));
-
+				documento.setMotorista(motorista);
+				
 				return Optional.of(documento);
 			}
 		}, new Object[] { id });
@@ -58,8 +68,8 @@ public class DocumentoDAO extends DataAccessObject<Documento> {
 			sqlBuilder.append("TIPODOCUMENTO = '" + documento.getTipoDocumento() + "'");
 		if (documento.getDataVencimento() != null)
 			sqlBuilder.append("DATAVENCIMENTO = '" + documento.getDataVencimento() + "'");
-		if (documento.getIdMotorista() != null)
-			sqlBuilder.append("ID_MOTORISTA = " + documento.getIdMotorista());
+		if (documento.getMotorista() != null)
+			sqlBuilder.append("ID_MOTORISTA = " + documento.getMotorista());
 
 		String sql = sqlBuilder.toString();
 
@@ -81,10 +91,15 @@ public class DocumentoDAO extends DataAccessObject<Documento> {
 			@Override
 			public Documento mapRow(ResultSet rs, int rowNum) throws SQLException {
 				Documento documento = new Documento();
+				Motorista motorista = new Motorista();
 
+				motorista.setId(rs.getLong("ID_MOTORISTA"));
+				motorista.setNome(rs.getString("NOME"));
+				motorista.setEndereco(rs.getString("ENDERECO"));
+				motorista.setDataNascimento(rs.getString("DATANASCIMENTO"));
 				documento.setTipoDocumento(rs.getString("TIPODOCUMENTO"));
 				documento.setDataVencimento(rs.getString("DATAVENCIMENTO"));
-				documento.setIdMotorista(rs.getLong("ID_MOTORISTA"));
+				documento.setMotorista(motorista);
 
 				return documento;
 			}
