@@ -45,7 +45,6 @@ public class DocumentoDAO extends DataAccessObject<Documento> {
 				
 				motorista.setId(rs.getLong("ID_MOTORISTA"));
 				motorista.setNome(rs.getString("NOME"));
-				System.out.println(rs.getString("NOME"));
 				motorista.setEndereco(rs.getString("ENDERECO"));
 				motorista.setDataNascimento(rs.getString("DATANASCIMENTO"));
 				documento.setId(rs.getLong("ID"));

@@ -1,15 +1,13 @@
 package br.com.transmaximo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class Viagem {
 
-	@JsonIgnore
 	private Long id;
 	private String destino;
 	private String tipoCarga;
 	private Long idMotorista;
 	private Long idCaminhao;
+	private StatusViagem statusViagem;
 
 	public Viagem() {
 
@@ -21,6 +19,15 @@ public class Viagem {
 		this.tipoCarga = carga;
 		this.idMotorista = idMotorista;
 		this.idCaminhao = idCaminhao;
+		this.statusViagem = StatusViagem.AGENDADA;
+	}
+
+	public StatusViagem getStatusViagem() {
+		return statusViagem;
+	}
+
+	public void setStatusViagem(StatusViagem statusViagem) {
+		this.statusViagem = statusViagem;
 	}
 
 	public Long getId() {

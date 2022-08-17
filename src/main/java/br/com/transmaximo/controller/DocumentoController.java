@@ -33,11 +33,11 @@ public class DocumentoController {
 	@PostMapping
 	public ResponseEntity<Documento> cadastrar(@RequestBody Documento documento, UriComponentsBuilder uriBuilder)
 			throws SQLException {
-		documentoService.salvar(documento);
+		Documento documentoSalvo = documentoService.salvar(documento);
 
-		URI uri = uriBuilder.path("documentos/{id}").buildAndExpand(documento.getId()).toUri();
+		URI uri = uriBuilder.path("documentos/{id}").buildAndExpand(documentoSalvo.getId()).toUri();
 
-		return ResponseEntity.created(uri).body(documento);
+		return ResponseEntity.created(uri).body(documentoSalvo);
 	}
 
 	@GetMapping("/{id}")

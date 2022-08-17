@@ -19,8 +19,8 @@ public class MotoristaServiceImpl implements MotoristaService {
 	private MotoristaDAO motoristaDao;
 
 	@Override
-	public void salvar(Motorista motorista) throws SQLException {
-		motoristaDao.salvar(motorista);
+	public Motorista salvar(Motorista motorista) throws SQLException {
+		return motoristaDao.salvar(motorista);
 	}
 
 	@Override

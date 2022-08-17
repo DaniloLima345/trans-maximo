@@ -33,11 +33,11 @@ public class MotoristaController {
 	@PostMapping
 	public ResponseEntity<Motorista> cadastrar(@RequestBody Motorista motorista, UriComponentsBuilder uriBuilder)
 			throws SQLException {
-		motoristaService.salvar(motorista);
+		Motorista motoristaSalvo = motoristaService.salvar(motorista);
 
-		URI uri = uriBuilder.path("motoristas/{id}").buildAndExpand(motorista.getId()).toUri();
+		URI uri = uriBuilder.path("motoristas/{id}").buildAndExpand(motoristaSalvo.getId()).toUri();
 
-		return ResponseEntity.created(uri).body(motorista);
+		return ResponseEntity.created(uri).body(motoristaSalvo);
 	}
 
 	@GetMapping("/{id}")

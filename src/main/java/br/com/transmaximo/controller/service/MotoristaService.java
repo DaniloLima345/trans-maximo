@@ -12,7 +12,7 @@ import br.com.transmaximo.paginacao.Pagina;
 @Service
 public interface MotoristaService {
 
-	void salvar(Motorista motorista) throws SQLException;
+	Motorista salvar(Motorista motorista) throws SQLException;
 
 	Optional<Motorista> buscarPorId(Long id);
 
