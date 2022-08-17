@@ -34,11 +34,11 @@ public class CaminhaoController {
 	public ResponseEntity<Caminhao> cadastrar(@RequestBody Caminhao caminhao, UriComponentsBuilder uriBuilder)
 			throws SQLException {
 
-		caminhaoService.salvar(caminhao);
+		Caminhao caminhaoSalvo = caminhaoService.salvar(caminhao);
 
-		URI uri = uriBuilder.path("caminhoes/{id}").buildAndExpand(caminhao.getId()).toUri();
+		URI uri = uriBuilder.path("caminhoes/{id}").buildAndExpand(caminhaoSalvo.getId()).toUri();
 
-		return ResponseEntity.created(uri).body(caminhao);
+		return ResponseEntity.created(uri).body(caminhaoSalvo);
 
 	}
 

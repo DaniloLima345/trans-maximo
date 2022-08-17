@@ -5,20 +5,20 @@ public class Viagem {
 	private Long id;
 	private String destino;
 	private String tipoCarga;
-	private Long idMotorista;
-	private Long idCaminhao;
+	private Motorista motorista;
+	private Caminhao caminhao;
 	private StatusViagem statusViagem;
 
 	public Viagem() {
 
 	}
 
-	public Viagem(Long id, String destino, String carga, Long idMotorista, Long idCaminhao) {
+	public Viagem(Long id, String destino, String carga, Motorista motorista, Caminhao caminhao) {
 		this.id = id;
 		this.destino = destino;
 		this.tipoCarga = carga;
-		this.idMotorista = idMotorista;
-		this.idCaminhao = idCaminhao;
+		this.motorista = motorista;
+		this.caminhao = caminhao;
 		this.statusViagem = StatusViagem.AGENDADA;
 	}
 
@@ -54,20 +54,20 @@ public class Viagem {
 		this.tipoCarga = tipoCarga;
 	}
 
-	public Long getIdMotorista() {
-		return idMotorista;
+	public Motorista getMotorista() {
+		return motorista;
 	}
 
-	public void setIdMotorista(Long idMotorista) {
-		this.idMotorista = idMotorista;
+	public void setMotorista(Motorista motorista) {
+		this.motorista = motorista;
 	}
 
-	public Long getIdCaminhao() {
-		return idCaminhao;
+	public Caminhao getCaminhao() {
+		return caminhao;
 	}
 
-	public void setIdCaminhao(Long idCaminhao) {
-		this.idCaminhao = idCaminhao;
+	public void setCaminhao(Caminhao caminhao) {
+		this.caminhao = caminhao;
 	}
 
 }
