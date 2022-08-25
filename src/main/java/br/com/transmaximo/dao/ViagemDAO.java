@@ -35,8 +35,9 @@ public class ViagemDAO extends DataAccessObject<Viagem> {
 	@Override
 	public Optional<Viagem> buscarPorId(Long id) {
 
-		String sql = "SELECT * FROM VIAGEM V INNER JOIN MOTORISTA M INNER JOIN CAMINHAO C "
-				+ "WHERE V.ID = ? AND V.ID_MOTORISTA = M.ID AND V.ID_CAMINHAO = C.ID";
+		String sql = "SELECT V.ID, V.DESTINO, V.TIPO_CARGA, M.ID AS ID_MOTORISTA, M.NOME, C.ID AS ID_CAMINHAO, C.PLACA"
+				+ "	FROM VIAGEM V INNER JOIN MOTORISTA M INNER JOIN CAMINHAO C WHERE V.ID = ? "
+				+ "AND V.ID_MOTORISTA = M.ID AND V.ID_CAMINHAO = C.ID";
 
 		return jdbcTemplate.queryForObject(sql, new RowMapper<Optional<Viagem>>() {
 			@Override
@@ -47,14 +48,9 @@ public class ViagemDAO extends DataAccessObject<Viagem> {
 
 				motorista.setId(rs.getLong("ID"));
 				motorista.setNome(rs.getString("NOME"));
-				motorista.setEndereco(rs.getString("ENDERECO"));
-				motorista.setDataNascimento(rs.getString("DATANASCIMENTO"));
 
 				caminhao.setId(rs.getLong("ID"));
 				caminhao.setPlaca(rs.getString("PLACA"));
-				caminhao.setModelo(rs.getString("MODELO"));
-				caminhao.setAnoFabricacao(rs.getString("ANOFABRICACAO"));
-				caminhao.setCapacidade(rs.getDouble("CAPACIDADE"));
 
 				viagem.setId(rs.getLong("ID"));
 				viagem.setDestino(rs.getString("DESTINO"));

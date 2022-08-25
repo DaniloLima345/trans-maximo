@@ -47,6 +47,7 @@ public class DocumentoDAO extends DataAccessObject<Documento> {
 				motorista.setNome(rs.getString("NOME"));
 				motorista.setEndereco(rs.getString("ENDERECO"));
 				motorista.setDataNascimento(rs.getString("DATANASCIMENTO"));
+				
 				documento.setId(rs.getLong("ID"));
 				documento.setTipoDocumento(rs.getString("TIPODOCUMENTO"));
 				documento.setDataVencimento(rs.getString("DATAVENCIMENTO"));
@@ -96,6 +97,7 @@ public class DocumentoDAO extends DataAccessObject<Documento> {
 				motorista.setNome(rs.getString("NOME"));
 				motorista.setEndereco(rs.getString("ENDERECO"));
 				motorista.setDataNascimento(rs.getString("DATANASCIMENTO"));
+				
 				documento.setTipoDocumento(rs.getString("TIPODOCUMENTO"));
 				documento.setDataVencimento(rs.getString("DATAVENCIMENTO"));
 				documento.setMotorista(motorista);
