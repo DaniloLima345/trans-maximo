@@ -69,7 +69,7 @@ public class CaminhaoController {
 
 	@Transactional
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deletar(@PathVariable Long id) throws SQLException {
+	public ResponseEntity<Caminhao> deletar(@PathVariable Long id) throws SQLException {
 		caminhaoService.deletar(id);
 		return ResponseEntity.ok().build();
 	}
